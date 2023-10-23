@@ -1,24 +1,26 @@
 <script>
 import { Icon } from "@iconify/vue";
 import data from "../../store";
-import ImageEditOptionsSidePanel from "./panels/ImageEditOptionsSidePanel.vue";
+import Panel from "./panels/Panel.vue";
+import Modal from "../uicomponent/Modal.vue";
 
 export default {
 	name: "ImageEditOptionsSidebar",
 	components: {
 		Icon,
-		ImageEditOptionsSidePanel,
+		Modal,
+		Panel,
 	},
 
-	data: function () {
-		return {
-			icons: data.sidebarIcons,
-			isPanelContainerActive: data.panel.isPanelContainerActive,
-		};
-	},
+	data: () => ({
+		icons: data.sidebarIcons,
+		isPanelContainerActive: data.panel.isPanelContainerActive,
+		currentPanel: data.panel.currentActivePanel,
+	}),
 	methods: {
 		setActive: function (clickedIconName, panelName) {
-			this.isPanelContainerActive = panelName;
+			this.isPanelContainerActive = true;
+			this.currentPanel = panelName;
 			this.icons = this.icons.map(function (currentIcon) {
 				const { icon } = currentIcon;
 				if (clickedIconName === icon) {
@@ -37,20 +39,23 @@ export default {
 };
 </script>
 <template>
-	<div class="grid place-content-center h-full w-auto duration-500 relative">
-		<div class="flex flex-col justify-center items-center gap-y-3 w-24">
-			<button
-				@click="setActive(icon, panelName)"
-				v-for="({ icon, iconName, isActive, panelName }, index) of icons"
-				:key="index"
-				:class="[
-					'flex items-center justify-center flex-col hover:text-slate-400 border rounded-xl w-16 h-16 aspect-square gap-y-[2px] overflow-hidden hover:border-slate-50/20 transition duration-300',
-					isActive ? 'border-slate-500/80 bg-slate-800/50 hover:text-slate-300 text-slate-300' : 'border-transparent text-icon-clr',
-				]">
-				<Icon :icon="icon" class="w-5 h-5" />
-				<small class="capitalize text-[.675em] tracking-wider">{{ iconName }}</small>
-			</button>
-			<ImageEditOptionsSidePanel />
+	<div class="grid h-full w-auto duration-500 relative isolate">
+		<div class="h-full bg-bar-clr grid border-r border-r-border-clr">
+			<ul class="flex flex-col justify-center items-center gap-y-3 w-20 relative">
+				<li v-for="({ icon, iconName, isActive, panelName }, index) of icons" :key="index">
+					<button
+						@click="setActive(icon, panelName)"
+						:class="[
+							'flex items-center justify-center flex-col hover:text-white border rounded-xl w-16 h-16 aspect-square gap-y-1 overflow-hidden hover:border-slate-50/20 transition duration-300',
+							isActive ? 'border-slate-500/80 bg-slate-500/30 hover:text-slate-50 text-slate-50' : 'border-transparent text-slate-400',
+						]">
+						<Icon :icon="icon" class="w-5 h-5" />
+						<small class="capitalize text-[.675em] tracking-wider">{{ iconName }}</small>
+					</button>
+				</li>
+			</ul>
 		</div>
+
+		<Panel :currentPanel="currentPanel" :isPanelContainerActive="isPanelContainerActive" />
 	</div>
 </template>

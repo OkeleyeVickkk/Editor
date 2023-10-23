@@ -8,6 +8,7 @@ export default {
 				"border-clr": "#353948",
 				"bar-clr": "#242631",
 				"primary-clr": "#1c1d26",
+				"secondary-clr": "#7042e0",
 			},
 		},
 	},
