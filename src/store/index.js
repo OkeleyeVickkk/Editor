@@ -9,6 +9,7 @@ export default reactive({
 	user_uploaded_images: [],
 	first_six_random_images: [],
 	uploaded_images_used_in_editor: [],
+	images_from_api: [],
 
 	//sidebar panel
 	sidebarIcons: [

@@ -1,6 +1,8 @@
 <script>
 import { TransitionRoot, TransitionChild, Dialog, DialogPanel, DialogTitle } from "@headlessui/vue";
 import { Icon } from "@iconify/vue";
+import SearchBarOptions from "./SearchBarOptions.vue";
+import ImageSearchResult from "./ImageSearchResult.vue";
 
 export default {
 	name: "Modal",
@@ -13,10 +15,38 @@ export default {
 		DialogPanel,
 		DialogTitle,
 		Icon,
+		SearchBarOptions,
+		ImageSearchResult,
+	},
+	data: function () {
+		return {
+			searchTerm: "",
+			searchResult: [],
+			tabOfOptions: [
+				{ term: "Beach", isActive: false },
+				{ term: "Mountain", isActive: false },
+				{ term: "Art", isActive: false },
+				{ term: "Sunset", isActive: false },
+				{ term: "Flowers", isActive: false },
+				{ term: "Food", isActive: false },
+				{ term: "Technology", isActive: false },
+				{ term: "Animals", isActive: false },
+				{ term: "Cityscape", isActive: false },
+				{ term: "Abstract", isActive: false },
+				{ term: "Fashion", isActive: false },
+			],
+		};
 	},
 	methods: {
 		closeModal: function () {
 			this.$emit("close-modal");
+		},
+		handleTabSelected: function (selectedTab) {
+			this.searchTerm = selectedTab;
+			this.tabOfOptions = this.tabOfOptions.map(function (tab) {
+				const { term } = tab;
+				return term === selectedTab ? { ...tab, isActive: true } : { ...tab, isActive: false };
+			});
 		},
 	},
 };
@@ -47,20 +77,19 @@ export default {
 						leave-from="opacity-100 scale-100"
 						leave-to="opacity-0 scale-95">
 						<DialogPanel
-							class="w-full flex-grow max-w-screen-2xl h-full block transform overflow-hidden md:rounded-2xl bg-bar-clr text-left min-h-screen md:min-h-[calc(100vh-2rem)] shadow-xl transition-all">
-							<header class="flex items-center justify-between py-4 sm:px-6 px-3 border-b border-b-border-clr">
-								<DialogTitle as="h3" class="text-lg font-medium leading-6 text-slate-300 tracking-wider">Unsplash Image Library</DialogTitle>
+							class="w-full flex-grow flex flex-col max-w-screen-2xl h-full transform overflow-hidden md:rounded-2xl bg-bar-clr text-left min-h-screen md:min-h-[calc(100vh-2rem)] shadow-xl transition-all">
+							<header class="flex items-center justify-between py-3 sm:px-6 px-3 border-b border-b-border-clr">
+								<DialogTitle as="h3" class="text-lg font-medium leading-6 text-slate-300 tracking-wider">Image Search </DialogTitle>
 								<button
 									@click="closeModal"
 									class="rounded-md text-white p-2 bg-transparent hover:bg-gray-600/40 transition-[background-color] duration-300">
 									<Icon icon="iconamoon:sign-times-duotone" class="w-6 h-6" />
 								</button>
 							</header>
-							<div class="pt-3 px-6">
-								<p class="text-sm text-gray-500">
-									Your payment has been successfully submitted. We’ve sent you an email with all of the details of your order.
-								</p>
-							</div>
+							<section class="flex-grow flex flex-col md:flex-row">
+								<SearchBarOptions @selectTab="handleTabSelected" :tabOfOptions="tabOfOptions" v-model:searchTerm="searchTerm" />
+								<ImageSearchResult :search="{ searchResult, searchTerm }" />
+							</section>
 						</DialogPanel>
 					</TransitionChild>
 				</div>

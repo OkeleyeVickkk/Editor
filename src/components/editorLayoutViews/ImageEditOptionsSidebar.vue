@@ -1,7 +1,7 @@
 <script>
 import { Icon } from "@iconify/vue";
 import data from "../../store";
-import Panel from "./panels/Panel.vue";
+import Panel from "./sideBarPanel/Panel.vue";
 import Modal from "../uicomponent/Modal.vue";
 
 export default {
