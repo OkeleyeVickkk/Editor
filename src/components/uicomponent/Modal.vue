@@ -21,6 +21,7 @@ export default {
 	data: function () {
 		return {
 			searchTerm: "",
+			page: 1,
 			searchResult: [],
 			tabOfOptions: [
 				{ term: "Beach", isActive: false },
@@ -65,7 +66,7 @@ export default {
 				leave-to="opacity-0">
 				<div class="fixed inset-0 bg-black bg-opacity-25" />
 			</TransitionChild>
-			<div class="fixed inset-0 bg-black/30" aria-hidden="true" />
+			<div class="fixed inset-0 bg-black/30 backdrop-blur-sm" aria-hidden="true" />
 			<div class="fixed inset-0 overflow-y-auto">
 				<div class="flex min-h-full justify-center md:p-4 text-center">
 					<TransitionChild
@@ -88,7 +89,7 @@ export default {
 							</header>
 							<section class="flex-grow flex flex-col md:flex-row">
 								<SearchBarOptions @selectTab="handleTabSelected" :tabOfOptions="tabOfOptions" v-model:searchTerm="searchTerm" />
-								<ImageSearchResult :search="{ searchResult, searchTerm }" />
+								<ImageSearchResult :search="{ searchTerm, page }" :searchResult="searchResult" />
 							</section>
 						</DialogPanel>
 					</TransitionChild>

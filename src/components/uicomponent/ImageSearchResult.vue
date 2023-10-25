@@ -2,47 +2,90 @@
 import axios from "axios";
 import data from "../../store";
 
+const baseURL = "https://api.unsplash.com/";
 export default {
 	props: {
 		search: Object,
+		searchResult: Array,
 	},
 	data: function () {
 		return {
 			images: data.images_from_api,
 			loading: false,
 			error: data.error,
+			url: "photos",
 		};
 	},
 
-	watch: {
-		search(newValue) {
-			if (newValue && newValue.searchResult instanceof Array) {
-			}
-		},
-		images(newImagesFromSearch, previousImages) {},
-	},
-	created() {
-		let self = this;
-		self.loading = true;
-		(async () => {
-			const unsplash_api_access_key = "-XU9oD759NXeVUPRv2mev4fTrS-oe2WafgvjcbSJ4rE";
-
-			const response = await axios({
-				baseURL: "https://api.unsplash.com/",
-				url: "photos",
-				params: {
-					client_id: unsplash_api_access_key,
-					per_page: 35,
-				},
+	methods: {
+		filterAwayImages: function (arrayImages) {
+			const newResult = arrayImages.filter((eachResult) => {
+				const images = ["small_s3", "small", "thumb", "regular"];
+				for (const key in eachResult.urls) {
+					if (!images.includes(key.toString()) || eachResult.urls[key] == (null || undefined)) {
+						return;
+					}
+				}
+				console.log(eachResult);
+				return eachResult;
 			});
+			// return newResult;
+		},
+		async fetchImage(params) {
+			let self = this;
+			const unsplash_api_access_key = "-XU9oD759NXeVUPRv2mev4fTrS-oe2WafgvjcbSJ4rE";
+			let newURL,
+				api_params = {
+					client_id: unsplash_api_access_key,
+					per_page: 30,
+				};
+			if (!params) {
+				newURL = self.url;
+				api_params.page = 1;
+			}
+			if (params && params.term.trim() !== "") {
+				newURL = `search/${this.url}`;
+				api_params.query = params.term;
+				api_params.page = params.page;
+			}
+			const response = await axios({
+				baseURL: baseURL,
+				url: newURL,
+				params: api_params,
+			});
+
 			if (response.status !== 200) {
 				self.loading = false;
 				self.error = "Error occured";
 			}
 
-			self.images = response && response.data;
+			if (Array.isArray(response.data)) {
+				const result = this.filterAwayImages(response.data);
+				console.log(result);
+			} else {
+				const result = this.filterAwayImages(response.data.result);
+				console.log(result);
+				// self.images = await response.data;
+			}
+
 			self.loading = false;
-		})();
+		},
+	},
+
+	watch: {
+		search(newValue) {
+			const check = typeof newValue.searchTerm === "string" && newValue.searchTerm.trim() !== "";
+			if (newValue && check && newValue.page) {
+				this.fetchImage({
+					term: `${newValue.searchTerm}`,
+					page: newValue.page,
+				});
+			}
+		},
+		images(newImagesFromSearch, previousImages) {},
+	},
+	created() {
+		this.fetchImage();
 	},
 };
 </script>
@@ -60,11 +103,14 @@ export default {
 			<div class="h-full overflow-y-scroll w-full block">
 				<ul class="columns-2 sm:columns-3 xl:columns-5">
 					<li v-for="image in images" :key="image.id" class="mb-4">
-						<div v-if="image" class="relative rounded-md overflow-hidden border border-slate-500/20">
+						<div v-if="image" class="relative rounded-md overflow-hidden border border-slate-500/20 min-h-0">
 							<picture>
-								<source media="(min-width: 991px)" :srcset="image.urls.small_s3" sizes="" />
+								<source media="(min-width: 991px)" :srcset="image.urls?.small_s3 ?? image.urls?.small ?? image.urls?.regular" sizes="" />
 								<source media="(min-width: 640px)" :srcset="image.urls.thumb" sizes="" />
-								<img :src="image.urls.small_s3" :alt="image.alt_description ?? image.slug ?? 'alt image'" class="w-full h-full object-cover" />
+								<img
+									:src="image.urls?.small_s3 ?? image.urls?.small ?? image.urls.regular"
+									:alt="image.alt_description ?? image.slug ?? 'alt image'"
+									class="w-full h-full object-cover" />
 							</picture>
 						</div>
 					</li>
