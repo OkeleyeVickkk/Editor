@@ -18,6 +18,7 @@ export default {
 		currentPanel: data.panel.currentActivePanel,
 	}),
 	methods: {
+		closeSideBarPanel: function () {},
 		setActive: function (clickedIconName, panelName) {
 			this.isPanelContainerActive = true;
 			this.currentPanel = panelName;
@@ -41,7 +42,7 @@ export default {
 <template>
 	<div class="grid h-full w-auto duration-500 relative isolate">
 		<div class="h-full bg-bar-clr grid border-r border-r-border-clr">
-			<ul class="flex flex-col justify-center items-center gap-y-3 w-20 relative">
+			<ul @dblclick.self="isPanelContainerActive = false" class="flex flex-col justify-start py-4 items-center gap-y-3 w-20 relative">
 				<li v-for="({ icon, iconName, isActive, panelName }, index) of icons" :key="index">
 					<button
 						@click="setActive(icon, panelName)"

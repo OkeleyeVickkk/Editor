@@ -18,19 +18,6 @@ export default {
 	},
 
 	methods: {
-		filterAwayImages: function (arrayImages) {
-			const newResult = arrayImages.filter((eachResult) => {
-				const images = ["small_s3", "small", "thumb", "regular"];
-				for (const key in eachResult.urls) {
-					if (!images.includes(key.toString()) || eachResult.urls[key] == (null || undefined)) {
-						return;
-					}
-				}
-				console.log(eachResult);
-				return eachResult;
-			});
-			// return newResult;
-		},
 		async fetchImage(params) {
 			let self = this;
 			const unsplash_api_access_key = "-XU9oD759NXeVUPRv2mev4fTrS-oe2WafgvjcbSJ4rE";
@@ -59,31 +46,12 @@ export default {
 				self.error = "Error occured";
 			}
 
-			if (Array.isArray(response.data)) {
-				const result = this.filterAwayImages(response.data);
-				console.log(result);
-			} else {
-				const result = this.filterAwayImages(response.data.result);
-				console.log(result);
-				// self.images = await response.data;
-			}
-
+			self.images = response && response.data;
 			self.loading = false;
 		},
 	},
 
-	watch: {
-		search(newValue) {
-			const check = typeof newValue.searchTerm === "string" && newValue.searchTerm.trim() !== "";
-			if (newValue && check && newValue.page) {
-				this.fetchImage({
-					term: `${newValue.searchTerm}`,
-					page: newValue.page,
-				});
-			}
-		},
-		images(newImagesFromSearch, previousImages) {},
-	},
+	watch: {},
 	created() {
 		this.fetchImage();
 	},
@@ -105,10 +73,11 @@ export default {
 					<li v-for="image in images" :key="image.id" class="mb-4">
 						<div v-if="image" class="relative rounded-md overflow-hidden border border-slate-500/20 min-h-0">
 							<picture>
-								<source media="(min-width: 991px)" :srcset="image.urls?.small_s3 ?? image.urls?.small ?? image.urls?.regular" sizes="" />
-								<source media="(min-width: 640px)" :srcset="image.urls.thumb" sizes="" />
+								<source media="(min-width: 991px)" :srcset="image?.urls.small_s3 ?? image?.urls.small ?? image?.urls.regular" sizes="" />
+								<source media="(min-width: 640px)" :srcset="image?.urls.small_s3 ?? image?.urls.small ?? image?.urls.regular" sizes="" />
 								<img
-									:src="image.urls?.small_s3 ?? image.urls?.small ?? image.urls.regular"
+									loading="lazy"
+									:src="image?.urls.small_s3 ?? image?.urls.small ?? image?.urls.regular"
 									:alt="image.alt_description ?? image.slug ?? 'alt image'"
 									class="w-full h-full object-cover" />
 							</picture>

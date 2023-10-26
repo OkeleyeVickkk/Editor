@@ -18,28 +18,40 @@ export default reactive({
 			iconName: "photo",
 			panelName: "PhotoImagePanel",
 			isActive: false,
-			isDisabled: false,
+			isDisabled: true,
+			subPanels: {
+				subPanelName: "",
+			},
 		},
 		{
 			icon: "solar:crop-minimalistic-line-duotone",
 			iconName: "crop",
 			panelName: "CropPanel",
 			isActive: false,
-			isDisabled: false,
+			isDisabled: true,
+			subPanels: {
+				subPanelName: "",
+			},
 		},
 		{
 			icon: "solar:scale-line-duotone",
 			iconName: "resize",
 			panelName: "ResizePanel",
 			isActive: false,
-			isDisabled: false,
+			isDisabled: true,
+			subPanels: {
+				subPanelName: "",
+			},
 		},
 		{
 			icon: "solar:tuning-bold-duotone",
 			iconName: "finetune",
 			panelName: "FineTunePanel",
 			isActive: false,
-			isDisabled: false,
+			isDisabled: true,
+			subPanels: {
+				subPanelName: "",
+			},
 		},
 	],
 	panel: {
