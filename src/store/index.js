@@ -58,4 +58,17 @@ export default reactive({
 		isPanelContainerActive: false,
 		currentActivePanel: null,
 	},
+
+	finetune: {
+		light: [
+			{
+				name: "brightness",
+				xScroll: 50,
+			},
+			{
+				name: "opacity",
+				xScroll: 50,
+			},
+		],
+	},
 });

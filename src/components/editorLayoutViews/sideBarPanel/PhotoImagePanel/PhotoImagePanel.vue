@@ -77,10 +77,9 @@ export default {
 			<div>
 				<button
 					@click="openUserFileGallery"
-					class="bg-secondary-clr hover:bg-secondary-clr/80 transition duration-300 text-[.86rem] w-full rounded-[4px] py-3 tracking-wide">
+					class="bg-secondary-clr hover:bg-secondary-clr/80 transition duration-300 text-[.86rem] w-full rounded-[4px] py-2 tracking-wide">
 					Select Image
 				</button>
-
 				<button
 					@click="handleModal"
 					class="bg-slate-50/10 mt-2 transition duration-300 text-[.84rem] border flex items-center gap-x-2 justify-center overflow-hidden border-slate-500/70 w-full rounded-[4px] py-[9.5px] tracking-wider">

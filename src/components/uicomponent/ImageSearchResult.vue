@@ -71,10 +71,18 @@ export default {
 			<div class="h-full overflow-y-scroll w-full block">
 				<ul class="columns-2 sm:columns-3 xl:columns-5">
 					<li v-for="image in images" :key="image.id" class="mb-4">
-						<div v-if="image" class="relative rounded-md overflow-hidden border border-slate-500/20 min-h-0">
-							<picture>
-								<source media="(min-width: 991px)" :srcset="image?.urls.small_s3 ?? image?.urls.small ?? image?.urls.regular" sizes="" />
-								<source media="(min-width: 640px)" :srcset="image?.urls.small_s3 ?? image?.urls.small ?? image?.urls.regular" sizes="" />
+						<div v-if="image" class="relative rounded-md overflow-hidden border border-slate-500/20 flex items-center">
+							<picture class="h-full min-h-[100px]">
+								<source
+									class="w-full h-full object-cover"
+									media="(min-width: 991px)"
+									:srcset="image?.urls.small_s3 ?? image?.urls.small ?? image?.urls.regular"
+									sizes="" />
+								<source
+									class="w-full h-full object-cover"
+									media="(min-width: 640px)"
+									:srcset="image?.urls.small_s3 ?? image?.urls.small ?? image?.urls.regular"
+									sizes="" />
 								<img
 									loading="lazy"
 									:src="image?.urls.small_s3 ?? image?.urls.small ?? image?.urls.regular"

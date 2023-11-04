@@ -30,13 +30,15 @@ export default {
 
 <template>
 	<aside
+		@dblclick.self="isPanelContainerActive = false"
 		:class="[
-			'w-[272px] lg:h-full border-r transition-transform left-full border-r-border-clr p-4 bg-bar-clr text-white absolute z-[-1] block top-0 bottom-0 my-auto panel',
+			'w-[272px] lg:h-full border-r transition-transform left-full flex flex-col justify-between border-r-border-clr p-4 bg-bar-clr text-white absolute z-[-1] top-0 bottom-0 my-auto panel',
 			isPanelContainerActive ? 'active-panel' : '',
 		]">
 		<KeepAlive>
 			<component :is="currentPanel"></component>
 		</KeepAlive>
+		<span class="text-xs select-none tracking-wider text-slate-500 text-center">Double click panel to close</span>
 	</aside>
 </template>
 
